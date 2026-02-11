@@ -6,7 +6,10 @@
     "autoload": {
         "psr-4": {
             "Hexlet\\Code\\": "src/"
-        }
+        },
+        "files": [
+            "src/Parser/Parser.php"
+        ]
     },
     "authors": [
         {
@@ -15,6 +18,7 @@
         }
     ],
     "require": {
-        "docopt/docopt": "^1.0"
+        "docopt/docopt": "^1.0",
+        "funct/funct": "^1.6"
     }
 }
