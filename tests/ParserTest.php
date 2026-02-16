@@ -10,18 +10,21 @@ class ParserTest extends TestCase
 {
     public function testParse(): void
     {
+        $path1 = "/home/felt/php-project-48/tests/fixtures/file1.json";
+        $path2 = "/home/felt/php-project-48/tests/fixtures/file2.json";
+
         $this->assertEquals(
             <<<EOT
-            {
-              - follow: false
-                host: hexlet.io
-              - proxy: 123.234.53.22
-              - timeout: 50
-              + timeout: 20
-              + verbose: true
-            }\n
-            EOT,
-            genDiff("/home/felt/php-project-48/tests/fixtures/file1.json", "/home/felt/php-project-48/tests/fixtures/file2.json")
+          {
+            - follow: false
+              host: hexlet.io
+            - proxy: 123.234.53.22
+            - timeout: 50
+            + timeout: 20
+            + verbose: true
+          }\n
+          EOT,
+            genDiff($path1, $path2)
         );
 
         $this->assertEquals(
@@ -35,7 +38,7 @@ class ParserTest extends TestCase
               + proxy: 123.234.53.22
             }\n
             EOT,
-            genDiff("/home/felt/php-project-48/tests/fixtures/file2.json", "/home/felt/php-project-48/tests/fixtures/file1.json")
+            genDiff($path2, $path1)
         );
     }
 }
