@@ -2,18 +2,13 @@
 
 namespace Differ\Differ;
 
-function genDiff(string ...$paths)
+function genDiff(string $firstPath, string $secondPath): string
 {
-    if (count($paths) !== 2) {
-        throw new \Exception("Two paths are required");
+    $paths = [$firstPath, $secondPath];
+    foreach ($paths as $path) {
+        $sorted[] = sortByKeys(getContent($path));
     }
-
-    $parsed = array_reduce($paths, function ($carry, $path) {
-        $carry[] = sortByKeys(getContent($path));
-        return $carry;
-    }, []);
-
-    [$first, $second] = $parsed;
+    [$first, $second] = $sorted;
 
     $result = "{\n";
     foreach ($first as $key => $value) {
@@ -67,14 +62,12 @@ function isAbsolute(string $path): bool
 function getPath(string $path): string
 {
     $relPath = getcwd() . '/' . $path;
-    $truePath = isAbsolute($path) ? $path : $relPath;
-    return $truePath;
+    return isAbsolute($path) ? $path : $relPath;
 }
 
-function getContent(string $path)
+function getContent(string $path): array
 {
-    $content = json_decode(file_get_contents(getPath($path)), true);
-    return $content;
+    return json_decode(file_get_contents(getPath($path)), true);
 }
 
 function sortByKeys(array $content): array

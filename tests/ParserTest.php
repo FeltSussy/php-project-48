@@ -21,7 +21,7 @@ class ParserTest extends TestCase
               + verbose: true
             }\n
             EOT,
-            genDiff("/home/felt/php-project-48/files/file1.json", "/home/felt/php-project-48/files/file2.json")
+            genDiff("/home/felt/php-project-48/tests/fixtures/file1.json", "/home/felt/php-project-48/tests/fixtures/file2.json")
         );
 
         $this->assertEquals(
@@ -35,7 +35,7 @@ class ParserTest extends TestCase
               + proxy: 123.234.53.22
             }\n
             EOT,
-            genDiff("/home/felt/php-project-48/files/file2.json", "/home/felt/php-project-48/files/file1.json")
+            genDiff("/home/felt/php-project-48/tests/fixtures/file2.json", "/home/felt/php-project-48/tests/fixtures/file1.json")
         );
     }
 }
