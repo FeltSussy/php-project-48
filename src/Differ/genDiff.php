@@ -4,6 +4,7 @@ namespace Differ\Differ;
 
 function genDiff(string $firstPath, string $secondPath): string
 {
+    $sorted = [];
     $paths = [$firstPath, $secondPath];
     foreach ($paths as $path) {
         $sorted[] = sortByKeys(getContent($path));
@@ -65,7 +66,7 @@ function getPath(string $path): string
     return isAbsolute($path) ? $path : $relPath;
 }
 
-function getContent(string $path): mixed
+function getContent(string $path): array
 {
     return json_decode(file_get_contents(getPath($path)), true);
 }
