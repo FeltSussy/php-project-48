@@ -1,7 +1,6 @@
 name: initialization
 
-on: push,
-    pull_request
+on: push
 
 jobs:
   build:
@@ -23,4 +22,3 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v6
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          
