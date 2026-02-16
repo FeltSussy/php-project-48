@@ -65,7 +65,7 @@ function getPath(string $path): string
     return isAbsolute($path) ? $path : $relPath;
 }
 
-function getContent(string $path): array
+function getContent(string $path): mixed
 {
     return json_decode(file_get_contents(getPath($path)), true);
 }
