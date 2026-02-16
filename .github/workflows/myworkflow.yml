@@ -1,0 +1,21 @@
+name: initialization
+
+on: push,
+    pull_request
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: setup php
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+      - name: composer installation
+        run: make install
+      - name: run linter
+        run: make lint
+      - name: run tests
+        run: make test
