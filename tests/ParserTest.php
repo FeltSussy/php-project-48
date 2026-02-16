@@ -10,8 +10,8 @@ class ParserTest extends TestCase
 {
     public function testParse(): void
     {
-        $path1 = "/home/felt/php-project-48/tests/fixtures/file1.json";
-        $path2 = "/home/felt/php-project-48/tests/fixtures/file2.json";
+        $path1 = __DIR__ . "/fixtures/file1.json";
+        $path2 = __DIR__ . "/fixtures/file2.json";
 
         $this->assertEquals(
             <<<EOT
