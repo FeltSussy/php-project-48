@@ -41,21 +41,21 @@ function formString(array $array): string
 
 function formatValue(mixed $value): string
 {
-    $string = '';
+    $string = $value;
     if ($value === true) {
         $string = 'true';
     }
-    
+
     if ($value === false) {
         $string = 'false';
     }
-    
+
     if ($value === null) {
         $string = 'null';
     }
-    
+
     if (is_array($value)) {
         $string = 'array';
     }
-    return (string) $string;
+    return $string;
 }
