@@ -30,7 +30,6 @@ function genDiff(string $firstPath, string $secondPath)
             }
         }
     }
-    
     return formString($result);
 }
 
@@ -49,4 +48,3 @@ function getContent(string $path): array
 {
     return json_decode(file_get_contents(getPath($path)), true);
 }
-

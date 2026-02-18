@@ -50,7 +50,7 @@ class ParserTest extends TestCase
     {
         $path1 = __DIR__ . "/fixtures/file2.json";
         $path2 = __DIR__ . "/fixtures/file1.json";
-  
+
         print_r(genDiff($path1, $path2));
         $this->assertTrue(true);
     }

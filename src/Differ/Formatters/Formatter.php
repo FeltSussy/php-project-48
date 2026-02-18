@@ -46,5 +46,7 @@ function formatToString(mixed $value): string
         return 'null';
     } elseif (is_array($value)) {
         return 'array';
-    } else return (string) $value;
+    } else {
+        return (string) $value;
+    }
 }
