@@ -11,23 +11,23 @@ function formString(array $array): string
 
         switch ($type) {
             case 'removed':
-                $value = formatToString($data['value']);
+                $value = formatValue($data['value']);
                 $result .= "  - {$key}: {$value}\n";
                 break;
 
             case 'added':
-                $value = formatToString($data['value']);
+                $value = formatValue($data['value']);
                 $result .= "  + {$key}: {$value}\n";
                 break;
 
             case 'unchanged':
-                $value = formatToString($data['value']);
+                $value = formatValue($data['value']);
                 $result .= "    {$key}: {$value}\n";
                 break;
 
             case 'changed':
-                $oldValue = formatToString($data['old']);
-                $newValue = formatToString($data['new']);
+                $oldValue = formatValue($data['old']);
+                $newValue = formatValue($data['new']);
                 $result .= "  - {$key}: {$oldValue}\n";
                 $result .= "  + {$key}: {$newValue}\n";
                 break;
@@ -39,17 +39,19 @@ function formString(array $array): string
     return $result . "}\n";
 }
 
-function formatToString(mixed $value): string
+function formatValue(mixed $value): string
 {
+    $string = '';
     if ($value === true) {
-        return 'true';
+        $string = 'true';
     } elseif ($value === false) {
-        return 'false';
+        $string = 'false';
     } elseif ($value === null) {
-        return 'null';
+        $string = 'null';
     } elseif (is_array($value)) {
-        return 'array';
+        $string = 'array';
     } else {
-        return (string) $value;
+        $string = (string) $value;
     }
+    return $string;
 }
