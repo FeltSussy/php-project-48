@@ -33,7 +33,7 @@ function formString(array $array): string
                 break;
 
             default:
-                throw new \Exception("Unknown type {$type}");
+                throw new \InvalidArgumentException("Unknown type {$type}");
         }
     }
     return $result . "}\n";
