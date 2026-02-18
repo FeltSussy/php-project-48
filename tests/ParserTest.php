@@ -4,9 +4,11 @@ namespace Hexlet\Code\Tests;
 
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\CoversFunction;
 
 use function Differ\Differ\genDiff;
 
+#[CoversFunction('Differ\Differ\genDiff')]
 class ParserTest extends TestCase
 {
     public function testGenDiff(): void
