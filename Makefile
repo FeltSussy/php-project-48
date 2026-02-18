@@ -8,6 +8,9 @@ validate:
 	composer validate
 
 test:
+	composer exec --verbose phpunit tests
+
+test-coverage:
 	XDEBUG_MODE=coverage composer exec --verbose phpunit tests -- --exclude-group debug --coverage-clover=build/logs/clover.xml
 
 debug:
