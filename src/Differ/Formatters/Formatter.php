@@ -44,14 +44,18 @@ function formatValue(mixed $value): string
     $string = '';
     if ($value === true) {
         $string = 'true';
-    } elseif ($value === false) {
-        $string = 'false';
-    } elseif ($value === null) {
-        $string = 'null';
-    } elseif (is_array($value)) {
-        $string = 'array';
-    } else {
-        $string = (string) $value;
     }
-    return $string;
+    
+    if ($value === false) {
+        $string = 'false';
+    }
+    
+    if ($value === null) {
+        $string = 'null';
+    }
+    
+    if (is_array($value)) {
+        $string = 'array';
+    }
+    return (string) $string;
 }
