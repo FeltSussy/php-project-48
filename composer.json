@@ -10,7 +10,8 @@
             "Differ\\": "src/"
         },
         "files": [
-            "src/Differ/genDiff.php"
+            "src/Differ/Gendiff.php",
+            "src/Differ/Formatters/Formatter.php"
         ]
     },
     "authors": [
