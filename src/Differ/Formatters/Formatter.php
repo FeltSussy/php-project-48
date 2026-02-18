@@ -4,36 +4,39 @@ namespace Differ\Differ\Formatters;
 
 function formString(array $array): string
 {
-    $string = "{\n";
-    foreach ($array as $element => $data) {
+    $result = "{\n";
+    foreach ($array as $data) {
         $type = $data['type'];
         $key = $data['key'];
 
         switch ($type) {
             case 'removed':
                 $value = formatToString($data['value']);
-                $string .= "  - {$key}: {$value}\n";
+                $result .= "  - {$key}: {$value}\n";
                 break;
 
             case 'added':
                 $value = formatToString($data['value']);
-                $string .= "  + {$key}: {$value}\n";
+                $result .= "  + {$key}: {$value}\n";
                 break;
 
             case 'unchanged':
                 $value = formatToString($data['value']);
-                $string .= "    {$key}: {$value}\n";
+                $result .= "    {$key}: {$value}\n";
                 break;
 
             case 'changed':
                 $oldValue = formatToString($data['old']);
                 $newValue = formatToString($data['new']);
-                $string .= "  - {$key}: {$oldValue}\n";
-                $string .= "  + {$key}: {$newValue}\n";
+                $result .= "  - {$key}: {$oldValue}\n";
+                $result .= "  + {$key}: {$newValue}\n";
                 break;
+
+            default:
+                throw new \Exception("Unknown type {$type}");
         }
     }
-    return $string . "}\n";
+    return $result . "}\n";
 }
 
 function formatToString(mixed $value): string

@@ -13,24 +13,24 @@ function genDiff(string $firstPath, string $secondPath)
     $allKeys = array_merge(array_keys($first), array_keys($second));
     $normalizedKeys = sortBy(array_unique($allKeys), fn($value) => $value);
 
-    $result = [];
+    $diffDetailed = [];
     foreach ($normalizedKeys as $key) {
-        $inFirst = array_key_exists($key, $first);
-        $inSecond = array_key_exists($key, $second);
+        $inFirst = \array_key_exists($key, $first);
+        $inSecond = \array_key_exists($key, $second);
 
         if ($inFirst && !$inSecond) {
-            $result[] = ['key' => $key, 'type' => 'removed', 'value' => $first[$key]];
+            $diffDetailed[] = ['key' => $key, 'type' => 'removed', 'value' => $first[$key]];
         } elseif (!$inFirst && $inSecond) {
-            $result[] = ['key' => $key, 'type' => 'added', 'value' => $second[$key]];
+            $diffDetailed[] = ['key' => $key, 'type' => 'added', 'value' => $second[$key]];
         } else {
             if ($first[$key] === $second[$key]) {
-                $result[] = ['key' => $key, 'type' => 'unchanged', 'value' => $first[$key]];
+                $diffDetailed[] = ['key' => $key, 'type' => 'unchanged', 'value' => $first[$key]];
             } else {
-                $result[] = ['key' => $key, 'type' => 'changed', 'old' => $first[$key], 'new' => $second[$key]];
+                $diffDetailed[] = ['key' => $key, 'type' => 'changed', 'old' => $first[$key], 'new' => $second[$key]];
             }
         }
     }
-    return formString($result);
+    return formString($diffDetailed);
 }
 
 function isAbsolute(string $path): bool
