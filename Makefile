@@ -13,5 +13,8 @@ test:
 test-coverage:
 	XDEBUG_MODE=coverage composer exec --verbose phpunit tests -- --exclude-group debug --coverage-clover=build/logs/clover.xml
 
+coverage:
+	XDEBUG_MODE=coverage composer exec --verbose phpunit -- --exclude-group debug --coverage-text
+
 debug:
 	composer exec phpunit -- --group debug

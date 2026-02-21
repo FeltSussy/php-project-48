@@ -13,8 +13,8 @@ class ParserTest extends TestCase
 {
     public function testGenDiff(): void
     {
-        $path1 = __DIR__ . "/fixtures/file1.json";
-        $path2 = __DIR__ . "/fixtures/file2.json";
+        $path1 = __DIR__ . "/../fixtures/file1.json";
+        $path2 = __DIR__ . "/../fixtures/file2.json";
 
         $this->assertEquals(
             <<<EOT
@@ -48,8 +48,8 @@ class ParserTest extends TestCase
     #[Group('debug')]
     public function testDebug(): void
     {
-        $path1 = __DIR__ . "/fixtures/file2.json";
-        $path2 = __DIR__ . "/fixtures/file1.json";
+        $path1 = __DIR__ . "/../fixtures/file2.json";
+        $path2 = __DIR__ . "/../fixtures/file1.json";
 
         print_r(genDiff($path1, $path2));
         $this->assertTrue(true);

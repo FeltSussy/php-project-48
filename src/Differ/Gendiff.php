@@ -15,8 +15,8 @@ function genDiff(string $firstPath, string $secondPath)
 
     $diffDetailed = [];
     foreach ($normalizedKeys as $key) {
-        $inFirst = \array_key_exists($key, $first);
-        $inSecond = \array_key_exists($key, $second);
+        $inFirst = array_key_exists($key, $first);
+        $inSecond = array_key_exists($key, $second);
 
         if ($inFirst && !$inSecond) {
             $diffDetailed[] = ['key' => $key, 'type' => 'removed', 'value' => $first[$key]];
