@@ -24,19 +24,47 @@ class FormatterTest extends TestCase
         return [
             [
                 "{\n  + port: true\n}\n",
-                [['key' => 'port', 'type' => 'added', 'value' => true]]
+                [
+                    [
+                        'key' => 'port',
+                        'type' => 'added', 'value' => true
+                    ]
+                ]
             ],
             [
                 "{\n    ip: 192.100.10.10\n}\n",
-                [['key' => 'ip', 'type' => 'unchanged', 'value' => '192.100.10.10']]
+                [
+                    [
+                        'key' => 'ip',
+                        'type' => 'unchanged',
+                        'value' => '192.100.10.10'
+                    ]
+                ]
             ],
             [
                 "{\n  - ttl: 1\n  + ttl: 2\n}\n",
-                [['key' => 'ttl', 'type' => 'changed', 'old' => 1, 'new' => 2]]
+                [
+                    [
+                        'key' => 'ttl',
+                        'type' => 'changed',
+                        'old' => 1, 'new' => 2
+                    ]
+                ]
             ],
             [
                 "{\n  - ssl: null\n  + tcp: 80\n}\n",
-                [['key' => 'ssl', 'type' => 'removed', 'value' => null], ['key' => 'tcp', 'type' => 'added', 'value' => 80]]
+                [
+                    [
+                        'key' => 'ssl',
+                        'type' => 'removed',
+                        'value' => null
+                    ],
+                    [
+                        'key' => 'tcp',
+                        'type' => 'added',
+                        'value' => 80
+                    ]
+                ]
             ]
         ];
     }
