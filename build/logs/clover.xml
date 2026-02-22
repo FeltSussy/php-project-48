@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1771769934">
-  <project timestamp="1771769934" name="Clover Coverage">
+<coverage generated="1771770634">
+  <project timestamp="1771770634" name="Clover Coverage">
     <file name="/home/felt/php-project-48/src/Differ/Formatters/Formatter.php">
       <line num="7" type="stmt" count="4"/>
       <line num="8" type="stmt" count="4"/>

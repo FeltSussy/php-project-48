@@ -22,7 +22,7 @@ class GetPathTest extends TestCase
     public function testGetPath(): void
     {
         $this->assertFileIsReadable(getPath('tests/fixtures/file1.json'));
-        $this->assertFileIsReadable(getPath('/home/felt/php-project-48/tests/fixtures/file1.json'));
+        $this->assertFileIsReadable(getPath(__DIR__ . '/../../fixtures/file1.json'));
         $this->assertFileDoesNotExist(getPath('fixtures/file1.json'));
     }
 }
