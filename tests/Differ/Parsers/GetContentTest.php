@@ -19,7 +19,7 @@ class GetContentTest extends TestCase
                 'proxy' => '123.234.53.22',
                 'follow' => false
             ],
-            getContent('/home/felt/php-project-48/tests/fixtures/file1.json')
+            getContent(__DIR__ . '/../../fixtures/file1.json')
         );
         $this->expectException(\ErrorException::class);
 
