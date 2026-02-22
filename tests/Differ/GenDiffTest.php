@@ -1,6 +1,6 @@
 <?php
 
-namespace Hexlet\Code\Tests;
+namespace Tests\Differ;
 
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Group;
@@ -9,7 +9,7 @@ use PHPUnit\Framework\Attributes\CoversFunction;
 use function Differ\Differ\genDiff;
 
 #[CoversFunction('Differ\Differ\genDiff')]
-class ParserTest extends TestCase
+class GenDiffTest extends TestCase
 {
     public function testGenDiff(): void
     {
@@ -25,7 +25,8 @@ class ParserTest extends TestCase
             - timeout: 50
             + timeout: 20
             + verbose: true
-          }\n
+          }
+          
           EOT,
             genDiff($path1, $path2)
         );
@@ -39,7 +40,8 @@ class ParserTest extends TestCase
               - timeout: 20
               + timeout: 50
               - verbose: true
-            }\n
+            }
+            
             EOT,
             genDiff($path2, $path1)
         );

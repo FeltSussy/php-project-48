@@ -4,8 +4,9 @@ namespace Differ\Differ;
 
 use function Funct\Collection\sortBy;
 use function Differ\Differ\Formatters\formString;
+use function Differ\Differ\Parsers\getContent;
 
-function genDiff(string $firstPath, string $secondPath)
+function genDiff(string $firstPath, string $secondPath): string
 {
     $first = getContent($firstPath);
     $second = getContent($secondPath);
@@ -31,20 +32,4 @@ function genDiff(string $firstPath, string $secondPath)
         }
     }
     return formString($diffDetailed);
-}
-
-function isAbsolute(string $path): bool
-{
-    return str_starts_with($path, '/');
-}
-
-function getPath(string $path): string
-{
-    $relPath = getcwd() . '/' . $path;
-    return isAbsolute($path) ? $path : $relPath;
-}
-
-function getContent(string $path): array
-{
-    return json_decode(file_get_contents(getPath($path)), true);
 }

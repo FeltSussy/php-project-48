@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1771421568">
-  <project timestamp="1771421568" name="Clover Coverage">
+<coverage generated="1771769934">
+  <project timestamp="1771769934" name="Clover Coverage">
     <file name="/home/felt/php-project-48/src/Differ/Formatters/Formatter.php">
-      <line num="7" type="stmt" count="0"/>
-      <line num="8" type="stmt" count="0"/>
-      <line num="9" type="stmt" count="0"/>
-      <line num="10" type="stmt" count="0"/>
-      <line num="13" type="stmt" count="0"/>
-      <line num="14" type="stmt" count="0"/>
-      <line num="15" type="stmt" count="0"/>
-      <line num="16" type="stmt" count="0"/>
-      <line num="18" type="stmt" count="0"/>
-      <line num="19" type="stmt" count="0"/>
-      <line num="20" type="stmt" count="0"/>
-      <line num="21" type="stmt" count="0"/>
-      <line num="23" type="stmt" count="0"/>
-      <line num="24" type="stmt" count="0"/>
-      <line num="25" type="stmt" count="0"/>
-      <line num="26" type="stmt" count="0"/>
-      <line num="28" type="stmt" count="0"/>
-      <line num="29" type="stmt" count="0"/>
-      <line num="30" type="stmt" count="0"/>
-      <line num="31" type="stmt" count="0"/>
-      <line num="32" type="stmt" count="0"/>
-      <line num="33" type="stmt" count="0"/>
+      <line num="7" type="stmt" count="4"/>
+      <line num="8" type="stmt" count="4"/>
+      <line num="9" type="stmt" count="4"/>
+      <line num="10" type="stmt" count="4"/>
+      <line num="13" type="stmt" count="4"/>
+      <line num="14" type="stmt" count="1"/>
+      <line num="15" type="stmt" count="1"/>
+      <line num="16" type="stmt" count="1"/>
+      <line num="18" type="stmt" count="4"/>
+      <line num="19" type="stmt" count="2"/>
+      <line num="20" type="stmt" count="2"/>
+      <line num="21" type="stmt" count="2"/>
+      <line num="23" type="stmt" count="2"/>
+      <line num="24" type="stmt" count="1"/>
+      <line num="25" type="stmt" count="1"/>
+      <line num="26" type="stmt" count="1"/>
+      <line num="28" type="stmt" count="1"/>
+      <line num="29" type="stmt" count="1"/>
+      <line num="30" type="stmt" count="1"/>
+      <line num="31" type="stmt" count="1"/>
+      <line num="32" type="stmt" count="1"/>
+      <line num="33" type="stmt" count="1"/>
       <line num="36" type="stmt" count="0"/>
-      <line num="39" type="stmt" count="0"/>
+      <line num="39" type="stmt" count="4"/>
       <line num="44" type="stmt" count="0"/>
       <line num="45" type="stmt" count="0"/>
       <line num="46" type="stmt" count="0"/>
@@ -36,31 +36,45 @@
       <line num="57" type="stmt" count="0"/>
       <line num="58" type="stmt" count="0"/>
       <line num="60" type="stmt" count="0"/>
-      <metrics loc="62" ncloc="62" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="34" coveredstatements="0" elements="34" coveredelements="0"/>
+      <metrics loc="62" ncloc="62" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="34" coveredstatements="23" elements="34" coveredelements="23"/>
     </file>
     <file name="/home/felt/php-project-48/src/Differ/Gendiff.php">
-      <line num="10" type="stmt" count="1"/>
       <line num="11" type="stmt" count="1"/>
-      <line num="13" type="stmt" count="1"/>
+      <line num="12" type="stmt" count="1"/>
       <line num="14" type="stmt" count="1"/>
-      <line num="16" type="stmt" count="1"/>
+      <line num="15" type="stmt" count="1"/>
       <line num="17" type="stmt" count="1"/>
       <line num="18" type="stmt" count="1"/>
       <line num="19" type="stmt" count="1"/>
-      <line num="21" type="stmt" count="1"/>
+      <line num="20" type="stmt" count="1"/>
       <line num="22" type="stmt" count="1"/>
       <line num="23" type="stmt" count="1"/>
       <line num="24" type="stmt" count="1"/>
-      <line num="26" type="stmt" count="1"/>
+      <line num="25" type="stmt" count="1"/>
       <line num="27" type="stmt" count="1"/>
-      <line num="29" type="stmt" count="1"/>
-      <line num="33" type="stmt" count="1"/>
-      <line num="38" type="stmt" count="0"/>
-      <line num="43" type="stmt" count="0"/>
-      <line num="44" type="stmt" count="0"/>
-      <line num="49" type="stmt" count="0"/>
-      <metrics loc="51" ncloc="51" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="20" coveredstatements="16" elements="20" coveredelements="16"/>
+      <line num="28" type="stmt" count="1"/>
+      <line num="30" type="stmt" count="1"/>
+      <line num="34" type="stmt" count="1"/>
+      <metrics loc="36" ncloc="36" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="16" coveredstatements="16" elements="16" coveredelements="16"/>
     </file>
-    <metrics files="2" loc="113" ncloc="113" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="54" coveredstatements="16" elements="54" coveredelements="16"/>
+    <file name="/home/felt/php-project-48/src/Differ/Parsers/Parser.php">
+      <line num="7" type="stmt" count="1"/>
+      <line num="8" type="stmt" count="1"/>
+      <line num="9" type="stmt" count="1"/>
+      <line num="10" type="stmt" count="1"/>
+      <line num="11" type="stmt" count="0"/>
+      <line num="12" type="stmt" count="1"/>
+      <line num="13" type="stmt" count="0"/>
+      <line num="15" type="stmt" count="1"/>
+      <line num="18" type="stmt" count="1"/>
+      <line num="20" type="stmt" count="1"/>
+      <line num="21" type="stmt" count="0"/>
+      <line num="23" type="stmt" count="1"/>
+      <line num="28" type="stmt" count="2"/>
+      <line num="33" type="stmt" count="1"/>
+      <line num="34" type="stmt" count="1"/>
+      <metrics loc="36" ncloc="36" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="15" coveredstatements="12" elements="15" coveredelements="12"/>
+    </file>
+    <metrics files="3" loc="134" ncloc="134" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="65" coveredstatements="51" elements="65" coveredelements="51"/>
   </project>
 </coverage>

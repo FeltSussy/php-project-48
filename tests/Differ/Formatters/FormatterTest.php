@@ -1,14 +1,12 @@
 <?php
 
-namespace Hexlet\Code\Tests;
+namespace Tests\Differ\Formatters;
 
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\CoversFunction;
 
 use function Differ\Differ\Formatters\formString;
-use function Differ\Differ\Formatters\formatValue;
 
 #[CoversFunction('Differ\Differ\Formatters\formString')]
 class FormatterTest extends TestCase
@@ -23,16 +21,27 @@ class FormatterTest extends TestCase
     {
         return [
             [
-                "{\n  + port: true\n}\n",
+                <<<EOT
+                {
+                  + port: true
+                }
+                
+                EOT,
                 [
                     [
                         'key' => 'port',
-                        'type' => 'added', 'value' => true
+                        'type' => 'added',
+                        'value' => true
                     ]
                 ]
             ],
             [
-                "{\n    ip: 192.100.10.10\n}\n",
+                <<<EOT
+                {
+                    ip: 192.100.10.10
+                }
+                
+                EOT,
                 [
                     [
                         'key' => 'ip',
@@ -42,7 +51,13 @@ class FormatterTest extends TestCase
                 ]
             ],
             [
-                "{\n  - ttl: 1\n  + ttl: 2\n}\n",
+                <<<EOT
+                {
+                  - ttl: 1
+                  + ttl: 2
+                }
+                
+                EOT,
                 [
                     [
                         'key' => 'ttl',
@@ -52,7 +67,13 @@ class FormatterTest extends TestCase
                 ]
             ],
             [
-                "{\n  - ssl: null\n  + tcp: 80\n}\n",
+                <<<EOT
+                {
+                  - ssl: null
+                  + tcp: 80
+                }
+                
+                EOT,
                 [
                     [
                         'key' => 'ssl',

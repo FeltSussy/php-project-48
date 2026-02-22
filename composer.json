@@ -7,11 +7,13 @@
     "type": "library",
     "autoload": {
         "psr-4": {
-            "Differ\\": "src/"
+            "Differ\\": "src/",
+            "Tests\\": "tests/"
         },
         "files": [
             "src/Differ/Gendiff.php",
-            "src/Differ/Formatters/Formatter.php"
+            "src/Differ/Formatters/Formatter.php",
+            "src/Differ/Parsers/Parser.php"
         ]
     },
     "authors": [
@@ -23,7 +25,8 @@
     "description": "hexlet genDiff",
     "require": {
         "docopt/docopt": "^1.0",
-        "funct/funct": "^1.6"
+        "funct/funct": "^1.6",
+        "symfony/yaml": "^7.4"
     },
     "require-dev": {
         "phpunit/phpunit": "^12.5",
