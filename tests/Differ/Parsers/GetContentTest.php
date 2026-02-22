@@ -21,7 +21,7 @@ class GetContentTest extends TestCase
             ],
             getContent('/home/felt/php-project-48/tests/fixtures/file1.json')
         );
-        $this->expectException(\Exception::class);
+        $this->expectException(\ErrorException::class);
 
         $content = getContent('/');
     }
