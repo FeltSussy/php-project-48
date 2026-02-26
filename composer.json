@@ -11,9 +11,9 @@
             "Tests\\": "tests/"
         },
         "files": [
-            "src/Differ/Gendiff.php",
-            "src/Differ/Formatters/Formatter.php",
-            "src/Differ/Parsers/Parser.php"
+            "src/Differ.php",
+            "src/Formatter.php",
+            "src/Parsers.php"
         ]
     },
     "authors": [

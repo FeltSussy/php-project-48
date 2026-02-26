@@ -1,6 +1,11 @@
 <?php
 
-namespace Differ\Differ\Formatters;
+namespace Differ\Formatter;
+
+const REMOVED = 'removed';
+const ADDED = 'added';
+const UNCHANGED = 'unchanged';
+const CHANGED = 'changed';
 
 function formString(array $array): string
 {
@@ -10,24 +15,24 @@ function formString(array $array): string
         $key = $data['key'];
 
         switch ($type) {
-            case 'removed':
+            case REMOVED:
                 $value = formatValue($data['value']);
                 $result .= "  - {$key}: {$value}\n";
                 break;
 
-            case 'added':
+            case ADDED:
                 $value = formatValue($data['value']);
                 $result .= "  + {$key}: {$value}\n";
                 break;
 
-            case 'unchanged':
+            case UNCHANGED:
                 $value = formatValue($data['value']);
                 $result .= "    {$key}: {$value}\n";
                 break;
 
-            case 'changed':
-                $oldValue = formatValue($data['old']);
-                $newValue = formatValue($data['new']);
+            case CHANGED:
+                $oldValue = formatValue($data['old value']);
+                $newValue = formatValue($data['new value']);
                 $result .= "  - {$key}: {$oldValue}\n";
                 $result .= "  + {$key}: {$newValue}\n";
                 break;

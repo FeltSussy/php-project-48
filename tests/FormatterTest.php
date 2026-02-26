@@ -6,9 +6,9 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\CoversFunction;
 
-use function Differ\Differ\Formatters\formString;
+use function Differ\Formatter\formString;
 
-#[CoversFunction('Differ\Differ\Formatters\formString')]
+#[CoversFunction('Differ\Formatter\formString')]
 class FormatterTest extends TestCase
 {
     #[DataProvider('formStringProvider')]
@@ -62,7 +62,7 @@ class FormatterTest extends TestCase
                     [
                         'key' => 'ttl',
                         'type' => 'changed',
-                        'old' => 1, 'new' => 2
+                        'old value' => 1, 'new value' => 2
                     ]
                 ]
             ],

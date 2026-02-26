@@ -5,9 +5,9 @@ namespace Tests\Differ\Parsers;
 use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\TestCase;
 
-use function Differ\Differ\Parsers\getContent;
+use function Differ\Parsers\getContent;
 
-#[CoversFunction('Differ\Differ\Parsers\getContent')]
+#[CoversFunction('Differ\Parsers\getContent')]
 class GetContentTest extends TestCase
 {
     public function testGetContent(): void
@@ -19,7 +19,7 @@ class GetContentTest extends TestCase
                 'proxy' => '123.234.53.22',
                 'follow' => false
             ],
-            getContent(__DIR__ . '/../../fixtures/file1.json')
+            getContent(__DIR__ . '/fixtures/file1.json')
         );
         $this->expectException(\ErrorException::class);
 

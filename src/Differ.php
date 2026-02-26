@@ -3,8 +3,13 @@
 namespace Differ\Differ;
 
 use function Funct\Collection\sortBy;
-use function Differ\Differ\Formatters\formString;
-use function Differ\Differ\Parsers\getContent;
+use function Differ\Formatter\formString;
+use function Differ\Parsers\getContent;
+
+const REMOVED = 'removed';
+const ADDED = 'added';
+const UNCHANGED = 'unchanged';
+const CHANGED = 'changed';
 
 function genDiff(string $firstPath, string $secondPath): string
 {
@@ -20,14 +25,22 @@ function genDiff(string $firstPath, string $secondPath): string
         $inSecond = array_key_exists($key, $second);
 
         if ($inFirst && !$inSecond) {
-            $diffDetailed[] = ['key' => $key, 'type' => 'removed', 'value' => $first[$key]];
+            $diffDetailed[] = [
+                'key' => $key, 'type' => REMOVED, 'value' => $first[$key]
+            ];
         } elseif (!$inFirst && $inSecond) {
-            $diffDetailed[] = ['key' => $key, 'type' => 'added', 'value' => $second[$key]];
+            $diffDetailed[] = [
+                'key' => $key, 'type' => ADDED, 'value' => $second[$key]
+            ];
         } else {
             if ($first[$key] === $second[$key]) {
-                $diffDetailed[] = ['key' => $key, 'type' => 'unchanged', 'value' => $first[$key]];
+                $diffDetailed[] = [
+                    'key' => $key, 'type' => UNCHANGED, 'value' => $first[$key]
+                ];
             } else {
-                $diffDetailed[] = ['key' => $key, 'type' => 'changed', 'old' => $first[$key], 'new' => $second[$key]];
+                $diffDetailed[] = [
+                    'key' => $key, 'type' => CHANGED, 'old value' => $first[$key], 'new value' => $second[$key]
+                ];
             }
         }
     }

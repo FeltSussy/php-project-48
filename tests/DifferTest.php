@@ -5,17 +5,17 @@ namespace Tests\Differ;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\CoversFunction;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 use function Differ\Differ\genDiff;
+use function Differ\Parsers\getFileFormat;
 
 #[CoversFunction('Differ\Differ\genDiff')]
-class GenDiffTest extends TestCase
+class DifferTest extends TestCase
 {
-    public function testGenDiff(): void
+    #[DataProvider('differProvider')]
+    public function testDiffer(string $path1, string $path2): void
     {
-        $path1 = __DIR__ . "/../fixtures/file1.json";
-        $path2 = __DIR__ . "/../fixtures/file2.json";
-
         $this->assertEquals(
             <<<EOT
           {
@@ -47,13 +47,23 @@ class GenDiffTest extends TestCase
         );
     }
 
+    public static function differProvider(): array
+    {
+        return [
+        [__DIR__ . "/fixtures/file1.json", __DIR__ . "/fixtures/file2.json"],
+        [__DIR__ . "/fixtures/file1.yaml", __DIR__ . "/fixtures/file2.yml"],
+        ];
+    }
+
     #[Group('debug')]
     public function testDebug(): void
     {
-        $path1 = __DIR__ . "/../fixtures/file2.json";
-        $path2 = __DIR__ . "/../fixtures/file1.json";
+        $path1 = __DIR__ . "/fixtures/file2.yml";
+        $path2 = __DIR__ . "/fixtures/file1.json";
 
-        print_r(genDiff($path1, $path2));
+        // print_r(genDiff($path1, $path2));
+
+        echo getFileFormat($path1);
         $this->assertTrue(true);
     }
 }

@@ -17,4 +17,7 @@ coverage:
 	XDEBUG_MODE=coverage composer exec --verbose phpunit -- --exclude-group debug --coverage-text
 
 debug:
-	composer exec phpunit -- --group debug --testdox
+	composer exec --verbose phpunit -- --group debug
+
+cbf:
+	composer exec phpcbf src tests
