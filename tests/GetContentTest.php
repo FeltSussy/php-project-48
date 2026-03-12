@@ -14,10 +14,30 @@ class GetContentTest extends TestCase
     {
         $this->assertEquals(
             [
-                'host' => 'hexlet.io',
-                'timeout' => 50,
-                'proxy' => '123.234.53.22',
-                'follow' => false
+                'common' => [
+                    'setting1' => 'Value 1',
+                    'setting2' => 200,
+                    'setting3' => true,
+                    'setting6' => [
+                        'doge' => [
+                            'wow' => ''
+                        ],
+                        'key' => 'value'
+                    ]
+                ],
+                'group1' => [
+                    'baz' => 'bas',
+                    'foo' => 'bar',
+                    'nest' => [
+                        'key' => 'value'
+                    ]
+                ],
+                'group2' => [
+                    'abc' => 12345,
+                    'deep' => [
+                        'id' => 45
+                    ]
+                ]
             ],
             getContent(__DIR__ . '/fixtures/file1.json')
         );

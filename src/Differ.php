@@ -2,47 +2,71 @@
 
 namespace Differ\Differ;
 
-use function Funct\Collection\sortBy;
-use function Differ\Formatter\formString;
 use function Differ\Parsers\getContent;
+use function Differ\Formatters\formString;
 
 const REMOVED = 'removed';
 const ADDED = 'added';
 const UNCHANGED = 'unchanged';
-const CHANGED = 'changed';
+const UPDATED = 'updated';
+const NESTED = 'nested';
 
-function genDiff(string $firstPath, string $secondPath): string
+function genDiff(string $firstPath, string $secondPath, string $formatName = 'stylish')
 {
-    $first = getContent($firstPath);
-    $second = getContent($secondPath);
+    $firstData = getContent($firstPath);
+    $secondData = getContent($secondPath);
 
-    $allKeys = array_merge(array_keys($first), array_keys($second));
-    $normalizedKeys = sortBy(array_unique($allKeys), fn($value) => $value);
+    $buildDiffTree = function ($first, $second) use (&$buildDiffTree) {
+        $allKeys = array_unique(array_merge(array_keys($first), array_keys($second)));
+        sort($allKeys);
 
-    $diffDetailed = [];
-    foreach ($normalizedKeys as $key) {
-        $inFirst = array_key_exists($key, $first);
-        $inSecond = array_key_exists($key, $second);
+        return array_map(function ($key) use ($buildDiffTree, $first, $second) {
+            $inFirst = array_key_exists($key, $first);
+            $inSecond = array_key_exists($key, $second);
 
-        if ($inFirst && !$inSecond) {
-            $diffDetailed[] = [
-                'key' => $key, 'type' => REMOVED, 'value' => $first[$key]
-            ];
-        } elseif (!$inFirst && $inSecond) {
-            $diffDetailed[] = [
-                'key' => $key, 'type' => ADDED, 'value' => $second[$key]
-            ];
-        } else {
-            if ($first[$key] === $second[$key]) {
-                $diffDetailed[] = [
-                    'key' => $key, 'type' => UNCHANGED, 'value' => $first[$key]
-                ];
-            } else {
-                $diffDetailed[] = [
-                    'key' => $key, 'type' => CHANGED, 'old value' => $first[$key], 'new value' => $second[$key]
+            if (!$inSecond) {
+                return [
+                    'key' => $key,
+                    'type' => REMOVED,
+                    'value' => $first[$key]
                 ];
             }
-        }
-    }
-    return formString($diffDetailed);
+
+            if (!$inFirst) {
+                return [
+                    'key' => $key,
+                    'type' => ADDED,
+                    'value' => $second[$key]
+                ];
+            }
+
+            $firstValue = $first[$key];
+            $secondValue = $second[$key];
+
+            if ($firstValue === $secondValue) {
+                return [
+                    'key' => $key,
+                    'type' => UNCHANGED,
+                    'value' => $firstValue
+                ];
+            }
+
+            if (is_array($firstValue) && is_array($secondValue)) {
+                return [
+                    'key' => $key,
+                    'type' => NESTED,
+                    'children' => $buildDiffTree($firstValue, $secondValue)
+                ];
+            }
+
+            return [
+                'key' => $key,
+                'type' => UPDATED,
+                'old' => $firstValue,
+                'new' => $secondValue
+            ];
+        }, $allKeys);
+    };
+
+    return formString($buildDiffTree($firstData, $secondData), $formatName);
 }

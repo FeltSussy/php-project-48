@@ -3,6 +3,9 @@
 namespace Differ\Parsers;
 
 use Symfony\Component\Yaml\Yaml;
+use Exception,
+
+ErrorException;
 
 const JSON = 'json';
 const YAML = 'yaml';
@@ -11,16 +14,16 @@ const YML = 'yml';
 
 function getContent(string $path): array
 {
-    $truePath = getPath($path);
-    $format = getFileFormat($truePath);
-    if (is_dir($truePath)) {
-        throw new \ErrorException('Path is a directory');
-    } elseif (!is_file($truePath)) {
-        throw new \ErrorException('File not found');
-    } elseif (!is_readable($truePath)) {
-        throw new \ErrorException('File is not readable');
+    $absolutePath = getPath($path);
+    $format = getFileFormat($path);
+    if (is_dir($absolutePath)) {
+        throw new ErrorException('Path is a directory');
+    } elseif (!is_file($absolutePath)) {
+        throw new ErrorException('File not found');
+    } elseif (!is_readable($absolutePath)) {
+        throw new ErrorException('File is not readable');
     }
-    return parseFileByFormat($format, $truePath);
+    return parseFileByFormat($format, $absolutePath);
 }
 
 function parseFileByFormat(string $format, string $path): array
@@ -33,7 +36,7 @@ function parseFileByFormat(string $format, string $path): array
     }
 
     if (!is_array($contentArray)) {
-        throw new \Exception('Invalid YAML');
+        throw new Exception('Invalid JSON');
     }
     return $contentArray;
 }

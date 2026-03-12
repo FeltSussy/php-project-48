@@ -22,4 +22,4 @@ DOC;
 
 $args = Docopt::handle($doc);
 
-echo genDiff((string) $args->offsetGet('<firstFile>'), (string) $args->offsetGet('<secondFile>'));
+echo genDiff((string) $args->offsetGet('<firstFile>'), (string) $args->offsetGet('<secondFile>'), (string) $args->offsetGet('--format'));

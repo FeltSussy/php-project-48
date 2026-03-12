@@ -6,18 +6,18 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\CoversFunction;
 
-use function Differ\Formatter\formString;
+use function Differ\Formatters\formString;
 
-#[CoversFunction('Differ\Formatter\formString')]
-class FormatterTest extends TestCase
+#[CoversFunction('Differ\Formatters\formString')]
+class FormattersTest extends TestCase
 {
-    #[DataProvider('formStringProvider')]
+    #[DataProvider('formStylishProvider')]
     public function testFormString(string $expected, array $argument): void
     {
-        $this->assertEquals($expected, formString($argument));
+        $this->assertEquals($expected, formString($argument, 'stylish'));
     }
 
-    public static function formStringProvider(): array
+    public static function formStylishProvider(): array
     {
         return [
             [
@@ -61,15 +61,15 @@ class FormatterTest extends TestCase
                 [
                     [
                         'key' => 'ttl',
-                        'type' => 'changed',
-                        'old value' => 1, 'new value' => 2
+                        'type' => 'updated',
+                        'old' => 1, 'new' => 2
                     ]
                 ]
             ],
             [
                 <<<EOT
                 {
-                  - ssl: null
+                  - ssl: NULL
                   + tcp: 80
                 }
                 
@@ -84,6 +84,49 @@ class FormatterTest extends TestCase
                         'key' => 'tcp',
                         'type' => 'added',
                         'value' => 80
+                    ]
+                ]
+            ],
+            [
+                <<<EOT
+                {
+                    group1: {
+                      - baz: bas
+                      + baz: bars
+                        foo: bar
+                      - nest: {
+                            key: value
+                        }
+                      + nest: str
+                    }
+                }
+
+                EOT,
+                [
+                    [
+                        'key' => 'group1',
+                        'type' => 'nested',
+                        'children' => [
+                            [
+                                'key' => 'baz',
+                                'type' => 'updated',
+                                'old' => 'bas',
+                                'new' => 'bars',
+                            ],
+                            [
+                                'key' => 'foo',
+                                'type' => 'unchanged',
+                                'value' => 'bar',
+                            ],
+                            [
+                                'key' => 'nest',
+                                'type' => 'updated',
+                                'old' => [
+                                    'key' => 'value',
+                                ],
+                                'new' => 'str',
+                            ],
+                        ],
                     ]
                 ]
             ]
