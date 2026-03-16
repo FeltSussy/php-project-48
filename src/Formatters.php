@@ -5,7 +5,8 @@ namespace Differ\Formatters;
 use Exception;
 
 use function Differ\Formatters\Stylish\formStylish;
-use function Differ\Formatters\Plane\formPlain;
+use function Differ\Formatters\Plain\formPlain;
+use function Differ\Formatters\Json\formJson;
 
 const STYLISH = 'stylish';
 const PLAIN = 'plain';
@@ -19,6 +20,9 @@ function formString(array $diff, string $formatName)
 
         case PLAIN:
             return formPlain($diff);
+
+        case JSON:
+            return formJson($diff);
 
         default:
             throw new Exception("Unknown format");

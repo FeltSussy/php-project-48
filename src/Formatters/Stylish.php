@@ -65,12 +65,14 @@ function formStylish(array $diff): string
             if ($type === UPDATED) {
                 $oldValue = $renderValue($node['old'], $depth + 1);
                 $newValue = $renderValue($node['new'], $depth + 1);
-                return "{$indent}" . SPECIAL_CHARS[REMOVED] . "{$key}: {$oldValue}\n{$indent}" . SPECIAL_CHARS[ADDED] . "{$key}: {$newValue}";
+                return "{$indent}" . SPECIAL_CHARS[REMOVED] . "{$key}: {$oldValue}\n{$indent}"
+                    . SPECIAL_CHARS[ADDED] . "{$key}: {$newValue}";
             }
 
             if ($type === NESTED) {
                 $children = $node['children'] ?? [];
-                return "{$indent}" . SPECIAL_CHARS[NESTED] . "{$key}: {$renderDiff($children, $depth + 1)}\n{$indent}  }";
+                return "{$indent}" . SPECIAL_CHARS[NESTED]
+                    . "{$key}: {$renderDiff($children, $depth + 1)}\n{$indent}  }";
             }
 
             return throw new Exception("Invalid type");

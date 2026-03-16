@@ -1,6 +1,6 @@
 <?php
 
-namespace Differ\Formatters\Plane;
+namespace Differ\Formatters\Plain;
 
 use Exception;
 
@@ -38,7 +38,8 @@ function formPlain(array $diff): string
             } elseif ($type === UPDATED) {
                 $old = $node['old'];
                 $new = $node['new'];
-                $acc[] = "Property '{$path}{$key}' was " . UPDATED . ". From {$renderValue($old)} to {$renderValue($new)}";
+                $acc[] = "Property '{$path}{$key}' was " . UPDATED
+                    . ". From {$renderValue($old)} to {$renderValue($new)}";
             }
             return $acc;
         }, []);

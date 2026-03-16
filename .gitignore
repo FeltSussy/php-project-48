@@ -1,1 +1,7 @@
 /vendor/
+build
+logs
+coverage.xml
+*.swo
+*.swp
+*.cache

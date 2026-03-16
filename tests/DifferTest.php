@@ -96,10 +96,12 @@ class DifferTest extends TestCase
     #[Group('debug')]
     public function testDebug(): void
     {
-        $path1 = __DIR__ . "/fixtures/file1.json";
-        $path2 = __DIR__ . "/fixtures/file2.json";
+        // $path1 = __DIR__ . "/fixtures/file1.json";
+        // $path2 = __DIR__ . "/fixtures/file2.json";
 
-        print_r(genDiff($path1, $path2));
+        // echo str_replace(['array (', ')'], ['[', ']'], var_export(genDiff($path1, $path2, "json"), true));
+
+        echo file_get_contents(__DIR__ . '/fixtures/expected-json-test.json');
 
         // echo getFileFormat($path1);
         $this->assertTrue(true);
