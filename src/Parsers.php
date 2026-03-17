@@ -3,7 +3,7 @@
 namespace Differ\Parsers;
 
 use Symfony\Component\Yaml\Yaml;
-use ErrorException;
+use RuntimeException;
 use JsonException;
 
 const JSON = 'json';
@@ -16,11 +16,11 @@ function getContent(string $path): array
     $absolutePath = getPath($path);
     $format = getFileFormat($path);
     if (is_dir($absolutePath)) {
-        throw new ErrorException('Path is a directory');
+        throw new RuntimeException('Path is a directory');
     } elseif (!is_file($absolutePath)) {
-        throw new ErrorException('File not found');
+        throw new RuntimeException('File not found');
     } elseif (!is_readable($absolutePath)) {
-        throw new ErrorException('File is not readable');
+        throw new RuntimeException('File is not readable');
     }
     return parseFileByFormat($format, $absolutePath);
 }

@@ -41,7 +41,7 @@ class GetContentTest extends TestCase
             ],
             getContent(__DIR__ . '/fixtures/file1.json')
         );
-        $this->expectException(\ErrorException::class);
+        $this->expectException(\RuntimeException::class);
 
         $content = getContent('/');
     }

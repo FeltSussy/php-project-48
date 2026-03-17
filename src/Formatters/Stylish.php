@@ -2,7 +2,7 @@
 
 namespace Differ\Formatters\Stylish;
 
-use ErrorException;
+use InvalidArgumentException;
 
 const INDENT_SYMBOL = ' ';
 const INDENT_COUNT = 4;
@@ -67,7 +67,7 @@ function formStylish(array $diff): string
                 $result = "{$indent}" . SPECIAL_CHARS[NESTED]
                     . "{$key}: {$renderDiff($children, $depth + 1)}\n{$indent}  }";
             } else {
-                throw new ErrorException('Invalid type');
+                throw new InvalidArgumentException('Invalid type');
             }
 
             return $result;
@@ -81,6 +81,5 @@ function formStylish(array $diff): string
 
 function toString(mixed $value): string
 {
-    $result = trim(var_export($value, true), "'");
-    return $result === null ? throw new ErrorException("'toString' returned null, string expected") : $result;
+    return trim(var_export($value, true), "'");
 }
