@@ -3,9 +3,8 @@
 namespace Differ\Parsers;
 
 use Symfony\Component\Yaml\Yaml;
-use Exception,
-
-ErrorException;
+use ErrorException;
+use JsonException;
 
 const JSON = 'json';
 const YAML = 'yaml';
@@ -36,7 +35,7 @@ function parseFileByFormat(string $format, string $path): array
     }
 
     if (!is_array($contentArray)) {
-        throw new Exception('Invalid JSON');
+        throw new JsonException('Invalid JSON');
     }
     return $contentArray;
 }

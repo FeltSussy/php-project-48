@@ -20,52 +20,60 @@ function genDiff(string $firstPath, string $secondPath, string $formatName = 'st
         $allKeys = array_unique(array_merge(array_keys($first), array_keys($second)));
         sort($allKeys);
 
-        return array_map(function ($key) use ($buildDiffTree, $first, $second) {
+        $result = [];
+
+        foreach ($allKeys as $key) {
             $inFirst = array_key_exists($key, $first);
             $inSecond = array_key_exists($key, $second);
 
             if (!$inSecond) {
-                return [
+                $result[] = [
                     'key' => $key,
                     'type' => REMOVED,
-                    'value' => $first[$key]
+                    'value' => $first[$key],
                 ];
+                continue;
             }
 
             if (!$inFirst) {
-                return [
+                $result[] = [
                     'key' => $key,
                     'type' => ADDED,
-                    'value' => $second[$key]
+                    'value' => $second[$key],
                 ];
+                continue;
             }
 
             $firstValue = $first[$key];
             $secondValue = $second[$key];
 
             if ($firstValue === $secondValue) {
-                return [
+                $result[] = [
                     'key' => $key,
                     'type' => UNCHANGED,
-                    'value' => $firstValue
+                    'value' => $firstValue,
                 ];
+                continue;
             }
 
             if (is_array($firstValue) && is_array($secondValue)) {
-                return [
+                $result[] = [
                     'key' => $key,
                     'type' => NESTED,
-                    'children' => $buildDiffTree($firstValue, $secondValue)
+                    'children' => $buildDiffTree($firstValue, $secondValue),
                 ];
+                continue;
             }
 
-            return [
+            $result[] = [
                 'key' => $key,
                 'type' => UPDATED,
                 'old' => $firstValue,
-                'new' => $secondValue
+                'new' => $secondValue,
             ];
-        }, $allKeys);
+        }
+
+        return $result;
     };
 
     return formString($buildDiffTree($firstData, $secondData), $formatName);

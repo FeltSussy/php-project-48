@@ -2,7 +2,7 @@
 
 namespace Differ\Formatters\Plain;
 
-use Exception;
+use ErrorException;
 
 use function Funct\Collection\flattenAll;
 
@@ -52,5 +52,5 @@ function formPlain(array $diff): string
 function toString(mixed $value): string
 {
     $result = var_export($value, true);
-    return $result === null ? throw new Exception("'toString' returned null, string expected") : $result;
+    return $result === null ? throw new ErrorException("'toString' returned null, string expected") : $result;
 }

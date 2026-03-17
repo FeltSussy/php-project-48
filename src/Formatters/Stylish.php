@@ -2,7 +2,7 @@
 
 namespace Differ\Formatters\Stylish;
 
-use Exception;
+use ErrorException;
 
 const INDENT_SYMBOL = ' ';
 const INDENT_COUNT = 4;
@@ -22,7 +22,6 @@ const SPECIAL_CHARS = [
 function formStylish(array $diff): string
 {
     $renderValue = function ($value, $depth) use (&$renderValue): string {
-
         if (!is_array($value)) {
             return toString($value);
         }
@@ -40,50 +39,48 @@ function formStylish(array $diff): string
     };
 
     $renderDiff = function ($nodes, $depth = 1) use (&$renderDiff, $renderValue): string {
-
         $indent = str_repeat(INDENT_SYMBOL, $depth * INDENT_COUNT - SPECIAL_CHAR_LENGTH);
 
         $lines = array_map(function ($node) use ($renderDiff, $depth, $indent, $renderValue): string {
             $type = $node['type'];
             $key = $node['key'];
 
+            $result = '';
+
             if ($type === REMOVED) {
                 $value = $renderValue($node['value'], $depth + 1);
-                return "{$indent}" . SPECIAL_CHARS[REMOVED] . "{$key}: {$value}";
-            }
-
-            if ($type === ADDED) {
+                $result = "{$indent}" . SPECIAL_CHARS[REMOVED] . "{$key}: {$value}";
+            } elseif ($type === ADDED) {
                 $value = $renderValue($node['value'], $depth + 1);
-                return "{$indent}" . SPECIAL_CHARS[ADDED] . "{$key}: {$value}";
-            }
-
-            if ($type === UNCHANGED) {
+                $result = "{$indent}" . SPECIAL_CHARS[ADDED] . "{$key}: {$value}";
+            } elseif ($type === UNCHANGED) {
                 $value = $renderValue($node['value'], $depth + 1);
-                return "{$indent}" . SPECIAL_CHARS[UNCHANGED] . "{$key}: {$value}";
-            }
-
-            if ($type === UPDATED) {
+                $result = "{$indent}" . SPECIAL_CHARS[UNCHANGED] . "{$key}: {$value}";
+            } elseif ($type === UPDATED) {
                 $oldValue = $renderValue($node['old'], $depth + 1);
                 $newValue = $renderValue($node['new'], $depth + 1);
-                return "{$indent}" . SPECIAL_CHARS[REMOVED] . "{$key}: {$oldValue}\n{$indent}"
-                    . SPECIAL_CHARS[ADDED] . "{$key}: {$newValue}";
-            }
 
-            if ($type === NESTED) {
+                $result = "{$indent}" . SPECIAL_CHARS[REMOVED] . "{$key}: {$oldValue}\n"
+                    . "{$indent}" . SPECIAL_CHARS[ADDED] . "{$key}: {$newValue}";
+            } elseif ($type === NESTED) {
                 $children = $node['children'] ?? [];
-                return "{$indent}" . SPECIAL_CHARS[NESTED]
+                $result = "{$indent}" . SPECIAL_CHARS[NESTED]
                     . "{$key}: {$renderDiff($children, $depth + 1)}\n{$indent}  }";
+            } else {
+                throw new ErrorException('Invalid type');
             }
 
-            return throw new Exception("Invalid type");
+            return $result;
         }, $nodes);
+
         return implode("\n", ["{", ...$lines]);
     };
+
     return $renderDiff($diff) . "\n}\n";
 }
 
 function toString(mixed $value): string
 {
     $result = trim(var_export($value, true), "'");
-    return $result === null ? throw new Exception("'toString' returned null, string expected") : $result;
+    return $result === null ? throw new ErrorException("'toString' returned null, string expected") : $result;
 }

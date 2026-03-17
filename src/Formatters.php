@@ -2,7 +2,7 @@
 
 namespace Differ\Formatters;
 
-use Exception;
+use ErrorException;
 
 use function Differ\Formatters\Stylish\formStylish;
 use function Differ\Formatters\Plain\formPlain;
@@ -25,6 +25,6 @@ function formString(array $diff, string $formatName)
             return formJson($diff);
 
         default:
-            throw new Exception("Unknown format");
+            throw new ErrorException("Unknown format");
     }
 }
