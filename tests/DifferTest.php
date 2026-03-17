@@ -92,18 +92,4 @@ class DifferTest extends TestCase
         [__DIR__ . "/fixtures/file1.yaml", __DIR__ . "/fixtures/file2.yml"],
         ];
     }
-
-    #[Group('debug')]
-    public function testDebug(): void
-    {
-        // $path1 = __DIR__ . "/fixtures/file1.json";
-        // $path2 = __DIR__ . "/fixtures/file2.json";
-
-        // echo str_replace(['array (', ')'], ['[', ']'], var_export(genDiff($path1, $path2, "json"), true));
-
-        echo file_get_contents(__DIR__ . '/fixtures/expected-json-test.json');
-
-        // echo getFileFormat($path1);
-        $this->assertTrue(true);
-    }
 }
