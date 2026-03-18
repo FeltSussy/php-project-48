@@ -49,5 +49,9 @@ function formPlain(array $diff): string
 
 function toString(mixed $value): string
 {
+    if ($value === null) {
+        return 'null';
+    }
+
     return var_export($value, true);
 }
