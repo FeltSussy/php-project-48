@@ -72,5 +72,11 @@ function getPath(string $path): string
 
 function getFileFormat(string $path): string
 {
-    return substr($path, strrpos($path, '.') + 1);
+    $pos = strrpos($path, '.');
+
+    if ($pos === false) {
+        throw new InvalidArgumentException("File has no extension: {$path}");
+    }
+
+    return substr($path, $pos + 1);
 }
