@@ -33,7 +33,7 @@ function parseFileByFormat(string $format, string $path): array
     $contentString = file_get_contents($path);
 
     if ($contentString === false) {
-        throw new RuntimeException("Failed to read file: {$path}");
+        throw new InvalidArgumentException("Failed to read file: {$path}");
     }
 
     if ($format === JSON) {
