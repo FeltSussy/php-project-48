@@ -3,8 +3,9 @@
 namespace Differ\Parsers;
 
 use Symfony\Component\Yaml\Yaml;
-use InvalidArgumentException;
-use JsonException;
+use JsonException,
+
+RuntimeException, InvalidArgumentException;
 
 const JSON = 'json';
 const YAML = 'yaml';
@@ -15,6 +16,7 @@ function getContent(string $path): array
 {
     $absolutePath = getPath($path);
     $format = getFileFormat($path);
+
     if (is_dir($absolutePath)) {
         throw new InvalidArgumentException('Path is a directory');
     } elseif (!is_file($absolutePath)) {
@@ -22,22 +24,39 @@ function getContent(string $path): array
     } elseif (!is_readable($absolutePath)) {
         throw new InvalidArgumentException('File is not readable');
     }
+
     return parseFileByFormat($format, $absolutePath);
 }
 
 function parseFileByFormat(string $format, string $path): array
 {
     $contentString = file_get_contents($path);
-    if ($format === JSON) {
-        $contentArray = json_decode($contentString, associative: true);
-    } elseif ($format === YAML || $format === YML) {
-        $contentArray = Yaml::parse($contentString);
+
+    if ($contentString === false) {
+        throw new RuntimeException("Failed to read file: {$path}");
     }
 
-    if (!is_array($contentArray)) {
-        throw new JsonException('Invalid JSON');
+    if ($format === JSON) {
+        $contentArray = json_decode($contentString, true);
+
+        if (!is_array($contentArray)) {
+            throw new JsonException('Invalid JSON');
+        }
+
+        return $contentArray;
     }
-    return $contentArray;
+
+    if ($format === YAML || $format === YML) {
+        $contentArray = Yaml::parse($contentString);
+
+        if (!is_array($contentArray)) {
+            throw new InvalidArgumentException('Invalid YAML');
+        }
+
+        return $contentArray;
+    }
+
+    throw new InvalidArgumentException("Unsupported format: {$format}");
 }
 
 function isAbsolute(string $path): bool

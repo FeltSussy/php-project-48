@@ -12,7 +12,7 @@ const STYLISH = 'stylish';
 const PLAIN = 'plain';
 const JSON = 'json';
 
-function formString(array $diff, string $formatName)
+function formString(array $diff, string $formatName): string
 {
     switch ($formatName) {
         case STYLISH:

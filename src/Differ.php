@@ -11,7 +11,7 @@ const UNCHANGED = 'unchanged';
 const UPDATED = 'updated';
 const NESTED = 'nested';
 
-function genDiff(string $firstPath, string $secondPath, string $formatName = 'stylish')
+function genDiff(string $firstPath, string $secondPath, string $formatName = 'stylish'): string
 {
     $firstData = getContent($firstPath);
     $secondData = getContent($secondPath);
