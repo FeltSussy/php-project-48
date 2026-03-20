@@ -42,13 +42,13 @@ function getContent(string $path): string
 function parseContentByFormat(string $content, string $format): array
 {
     switch ($format) {
-        case (JSON):
+        case JSON:
             return json_decode($content, true);
 
-        case (YAML):
+        case YAML:
             return Yaml::parse($content);
 
-        case (YML):
+        case YML:
             return Yaml::parse($content);
 
         default:

@@ -31,7 +31,7 @@ function genDiff(string $firstPath, string $secondPath, string $formatName = 'st
         $allKeys = array_unique(array_merge(array_keys($first), array_keys($second)));
         $allKeysSorted = array_values(sortBy($allKeys, fn ($key) => $key));
 
-        $diff = array_map(function ($key) use ($first, $second, $buildDiffTree) {
+        return array_map(function ($key) use ($first, $second, $buildDiffTree) {
             $inFirst = array_key_exists($key, $first);
             $inSecond = array_key_exists($key, $second);
 
@@ -75,8 +75,6 @@ function genDiff(string $firstPath, string $secondPath, string $formatName = 'st
 
             return $result;
         }, $allKeysSorted);
-
-        return $diff;
     };
 
     return format($buildDiffTree($firstParsedContent, $secondParsedContent), $formatName);
