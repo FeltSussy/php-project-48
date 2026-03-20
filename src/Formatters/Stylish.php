@@ -9,9 +9,10 @@ use const Differ\Constants\{
     ADDED,
     UNCHANGED,
     UPDATED,
-    NESTED
+    NESTED,
 };
 
+const SPECIFIER_TEMPLATE = '%s%s%s: %s';
 const INDENT_SYMBOL = ' ';
 const INDENT_COUNT = 4;
 const SPECIAL_CHAR_LENGTH = 2;
@@ -19,7 +20,7 @@ const SPECIAL_CHARS = [
     REMOVED => '- ',
     ADDED => '+ ',
     UNCHANGED => '  ',
-    NESTED => '  '
+    NESTED => '  ',
 ];
 
 function renderStylish(array $diff): string
@@ -37,7 +38,7 @@ function renderDiff(array $diff, int $depth = 1): string
 
         return match (true) {
             $type === REMOVED => sprintf(
-                "%s%s%s: %s",
+                SPECIFIER_TEMPLATE,
                 $indent,
                 SPECIAL_CHARS[REMOVED],
                 $key,
@@ -45,7 +46,7 @@ function renderDiff(array $diff, int $depth = 1): string
             ),
 
             $type === ADDED => sprintf(
-                "%s%s%s: %s",
+                SPECIFIER_TEMPLATE,
                 $indent,
                 SPECIAL_CHARS[ADDED],
                 $key,
@@ -53,7 +54,7 @@ function renderDiff(array $diff, int $depth = 1): string
             ),
 
             $type === UNCHANGED => sprintf(
-                "%s%s%s: %s",
+                SPECIFIER_TEMPLATE,
                 $indent,
                 SPECIAL_CHARS[UNCHANGED],
                 $key,
@@ -61,7 +62,7 @@ function renderDiff(array $diff, int $depth = 1): string
             ),
 
             $type === UPDATED => sprintf(
-                "%s%s%s: %s\n%s%s%s: %s",
+                SPECIFIER_TEMPLATE . "\n" . SPECIFIER_TEMPLATE,
                 $indent,
                 SPECIAL_CHARS[REMOVED],
                 $key,
@@ -73,7 +74,7 @@ function renderDiff(array $diff, int $depth = 1): string
             ),
 
             $type === NESTED => sprintf(
-                "%s%s%s: %s\n%s  }",
+                SPECIFIER_TEMPLATE . "\n%s  }",
                 $indent,
                 SPECIAL_CHARS[NESTED],
                 $key,

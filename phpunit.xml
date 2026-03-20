@@ -4,7 +4,7 @@
          bootstrap="vendor/autoload.php"
          cacheDirectory="build/logs"
          executionOrder="depends,defects"
-         requireCoverageMetadata="true"
+         requireCoverageMetadata="false"
          beStrictAboutCoverageMetadata="false"
          beStrictAboutOutputDuringTests="false"
          displayDetailsOnPhpunitDeprecations="true"

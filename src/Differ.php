@@ -36,46 +36,44 @@ function genDiff(string $firstPath, string $secondPath, string $formatName = 'st
             $inSecond = array_key_exists($key, $second);
 
             if (!$inSecond) {
-                return [
+                $result = [
                     'key' => $key,
                     'type' => REMOVED,
                     'value' => $first[$key],
                 ];
-            }
-
-            if (!$inFirst) {
-                return [
+            } elseif (!$inFirst) {
+                $result = [
                     'key' => $key,
                     'type' => ADDED,
                     'value' => $second[$key],
                 ];
+            } else {
+                $firstValue = $first[$key];
+                $secondValue = $second[$key];
+
+                if ($firstValue === $secondValue) {
+                    $result = [
+                        'key' => $key,
+                        'type' => UNCHANGED,
+                        'value' => $firstValue,
+                    ];
+                } elseif (is_array($firstValue) && is_array($secondValue)) {
+                    $result = [
+                        'key' => $key,
+                        'type' => NESTED,
+                        'children' => $buildDiffTree($firstValue, $secondValue),
+                    ];
+                } else {
+                    $result = [
+                        'key' => $key,
+                        'type' => UPDATED,
+                        'old' => $firstValue,
+                        'new' => $secondValue,
+                    ];
+                }
             }
 
-            $firstValue = $first[$key];
-            $secondValue = $second[$key];
-
-            if ($firstValue === $secondValue) {
-                return [
-                    'key' => $key,
-                    'type' => UNCHANGED,
-                    'value' => $firstValue,
-                ];
-            }
-
-            if (is_array($firstValue) && is_array($secondValue)) {
-                return [
-                    'key' => $key,
-                    'type' => NESTED,
-                    'children' => $buildDiffTree($firstValue, $secondValue),
-                ];
-            }
-
-            return [
-                'key' => $key,
-                'type' => UPDATED,
-                'old' => $firstValue,
-                'new' => $secondValue,
-            ];
+            return $result;
         }, $allKeysSorted);
 
         return $diff;

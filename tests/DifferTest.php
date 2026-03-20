@@ -9,14 +9,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 
 use function Differ\Differ\genDiff;
 
-#[CoversFunction('Differ\Differ\genDiff')]
-#[CoversFunction('Differ\Formatters\format')]
-#[CoversFunction('Differ\Formatters\Stylish\renderStylish')]
-#[CoversFunction('Differ\Formatters\Plain\renderPlain')]
-#[CoversFunction('Differ\Formatters\Json\renderJson')]
-#[CoversFunction('Differ\Parsers\getContent')]
-#[CoversFunction('Differ\Parsers\parseContentByFormat')]
-#[CoversFunction('Differ\Parsers\getFileFormat')]
 class DifferTest extends TestCase
 {
     #[DataProvider('differProvider')]

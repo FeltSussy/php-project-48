@@ -53,7 +53,7 @@ function parseContentByFormat(string $content, string $format): array
 
         default:
             throw new InvalidArgumentException("Unsupported format: {$format}");
-    };
+    }
 }
 
 function getFileFormat(string $path): string
