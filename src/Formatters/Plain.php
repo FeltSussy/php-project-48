@@ -61,7 +61,7 @@ function renderDiff(array $nodes, string $path = ''): string
     }, $nodes);
 
     $flattened = flattenAll($lines);
-    $withoutEmptyLines = array_filter($flattened, null);
+    $withoutEmptyLines = array_filter($flattened, fn(string $line) => $line !== '');
 
     return implode("\n", $withoutEmptyLines);
 }

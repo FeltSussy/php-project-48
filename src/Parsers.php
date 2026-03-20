@@ -14,7 +14,7 @@ function getContent(string $path): string
 {
     $absolutePath = realpath($path);
 
-    if (is_bool($absolutePath)) {
+    if ($absolutePath === false) {
         throw new InvalidArgumentException('Failed to get real path');
     }
 
@@ -30,7 +30,13 @@ function getContent(string $path): string
         throw new InvalidArgumentException('File is not readable');
     }
 
-    return file_get_contents($absolutePath);
+    $content = file_get_contents($absolutePath);
+
+    if ($content === false) {
+        throw new InvalidArgumentException('Failed to read file');
+    }
+
+    return $content;
 }
 
 function parseContentByFormat(string $content, string $format): array
