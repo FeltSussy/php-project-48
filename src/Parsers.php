@@ -14,6 +14,10 @@ function getContent(string $path): string
 {
     $absolutePath = realpath($path);
 
+    if (is_bool($absolutePath)) {
+        throw new InvalidArgumentException('Failed to get real path');
+    }
+
     if (is_dir($absolutePath)) {
         throw new InvalidArgumentException('Path is a directory');
     }
@@ -48,12 +52,11 @@ function parseContentByFormat(string $content, string $format): array
 
 function getFileFormat(string $path): string
 {
-    $absolutePath = realpath($path);
-    $pos = strrpos($absolutePath, '.');
+    $pos = strrpos($path, '.');
 
     if ($pos === false) {
-        throw new InvalidArgumentException("File has no extension: {$absolutePath}");
+        throw new InvalidArgumentException("File has no extension: {$path}");
     }
 
-    return substr($absolutePath, $pos + 1);
+    return substr($path, $pos + 1);
 }

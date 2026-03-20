@@ -88,7 +88,7 @@ function renderDiff(array $diff, int $depth = 1): string
     return implode("\n", ["{", ...$lines]);
 }
 
-function renderValue($value, $depth): string
+function renderValue(mixed $value, int $depth): string
 {
     if (!is_array($value)) {
         return toString($value);

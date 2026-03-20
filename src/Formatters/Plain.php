@@ -14,12 +14,12 @@ use const Differ\Constants\{
 
 const SPECIAL_CHAR = 2;
 
-function renderPlain(array $diff)
+function renderPlain(array $diff): string
 {
     return renderDiff($diff) . "\n";
 }
 
-function renderDiff($nodes, $path = ''): string
+function renderDiff(array $nodes, string $path = ''): string
 {
     $lines = array_map(function ($node) use ($path) {
         $type = $node['type'];
@@ -61,12 +61,12 @@ function renderDiff($nodes, $path = ''): string
     }, $nodes);
 
     $flattened = flattenAll($lines);
-    $withoutEmptyLines = array_filter($flattened);
+    $withoutEmptyLines = array_filter($flattened, null);
 
     return implode("\n", $withoutEmptyLines);
 }
 
-function renderValue($value): string
+function renderValue(mixed $value): string
 {
     if (is_array($value)) {
         return "[complex value]";

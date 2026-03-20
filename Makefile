@@ -4,6 +4,9 @@ install:
 lint:
 	composer exec --verbose phpcs -- --standard=PSR12 src bin tests
 
+phpstan:
+	composer exec --verbose phpstan analyse -- src tests
+
 validate:
 	composer validate
 
