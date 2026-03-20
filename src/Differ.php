@@ -3,78 +3,83 @@
 namespace Differ\Differ;
 
 use function Differ\Parsers\getContent;
-use function Differ\Formatters\formString;
+use function Differ\Parsers\getFileFormat;
+use function Differ\Parsers\parseContentByFormat;
+use function Differ\Formatters\format;
+use function Funct\Collection\sortBy;
 
-const REMOVED = 'removed';
-const ADDED = 'added';
-const UNCHANGED = 'unchanged';
-const UPDATED = 'updated';
-const NESTED = 'nested';
+use const Differ\Constants\{
+    REMOVED,
+    ADDED,
+    UNCHANGED,
+    UPDATED,
+    NESTED
+};
 
 function genDiff(string $firstPath, string $secondPath, string $formatName = 'stylish'): string
 {
-    $firstData = getContent($firstPath);
-    $secondData = getContent($secondPath);
+    $firstFileContent = getContent($firstPath);
+    $secondFileContent = getContent($secondPath);
+
+    $firstFileFormat = getFileFormat($firstPath);
+    $secondFileFormat = getFileFormat($secondPath);
+
+    $firstParsedContent = parseContentByFormat($firstFileContent, $firstFileFormat);
+    $secondParsedContent = parseContentByFormat($secondFileContent, $secondFileFormat);
 
     $buildDiffTree = function ($first, $second) use (&$buildDiffTree) {
         $allKeys = array_unique(array_merge(array_keys($first), array_keys($second)));
-        sort($allKeys);
+        $allKeysSorted = array_values(sortBy($allKeys, fn ($key) => $key));
 
-        $result = [];
-
-        foreach ($allKeys as $key) {
+        $diff = array_map(function ($key) use ($first, $second, $buildDiffTree) {
             $inFirst = array_key_exists($key, $first);
             $inSecond = array_key_exists($key, $second);
 
             if (!$inSecond) {
-                $result[] = [
+                return [
                     'key' => $key,
                     'type' => REMOVED,
                     'value' => $first[$key],
                 ];
-                continue;
             }
 
             if (!$inFirst) {
-                $result[] = [
+                return [
                     'key' => $key,
                     'type' => ADDED,
                     'value' => $second[$key],
                 ];
-                continue;
             }
 
             $firstValue = $first[$key];
             $secondValue = $second[$key];
 
             if ($firstValue === $secondValue) {
-                $result[] = [
+                return [
                     'key' => $key,
                     'type' => UNCHANGED,
                     'value' => $firstValue,
                 ];
-                continue;
             }
 
             if (is_array($firstValue) && is_array($secondValue)) {
-                $result[] = [
+                return [
                     'key' => $key,
                     'type' => NESTED,
                     'children' => $buildDiffTree($firstValue, $secondValue),
                 ];
-                continue;
             }
 
-            $result[] = [
+            return [
                 'key' => $key,
                 'type' => UPDATED,
                 'old' => $firstValue,
                 'new' => $secondValue,
             ];
-        }
+        }, $allKeysSorted);
 
-        return $result;
+        return $diff;
     };
 
-    return formString($buildDiffTree($firstData, $secondData), $formatName);
+    return format($buildDiffTree($firstParsedContent, $secondParsedContent), $formatName);
 }

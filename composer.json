@@ -11,6 +11,7 @@
             "Tests\\": "tests/"
         },
         "files": [
+            "src/Constants.php",
             "src/Differ.php",
             "src/Formatters.php",
             "src/Parsers.php",

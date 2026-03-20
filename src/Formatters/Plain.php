@@ -4,47 +4,74 @@ namespace Differ\Formatters\Plain;
 
 use function Funct\Collection\flattenAll;
 
-const REMOVED = 'removed';
-const ADDED = 'added';
-const UNCHANGED = 'unchanged';
-const UPDATED = 'updated';
-const NESTED = 'nested';
+use const Differ\Constants\{
+    REMOVED,
+    ADDED,
+    UNCHANGED,
+    UPDATED,
+    NESTED
+};
+
 const SPECIAL_CHAR = 2;
 
-function formPlain(array $diff): string
+function renderPlain(array $diff)
 {
-    $renderValue = function ($value) {
-        if (is_array($value)) {
-            return "[complex value]";
-        }
-        return toString($value);
-    };
+    return renderDiff($diff) . "\n";
+}
 
-    $renderDiff = function ($nodes, $path = '') use (&$renderDiff, $renderValue) {
-        $lines = array_reduce($nodes, function ($acc, $node) use ($renderDiff, $path, $renderValue) {
-            $type = $node['type'];
-            $key = $node['key'];
-            if ($type === NESTED) {
-                $children = $node['children'] ?? [];
-                $path .= $key . '.';
-                $acc[] = $renderDiff($children, $path);
-            } elseif ($type === ADDED) {
-                $value = $node['value'];
-                $acc[] = "Property '{$path}{$key}' was " . ADDED . " with value: {$renderValue($value)}";
-            } elseif ($type === REMOVED) {
-                $acc[] = "Property '{$path}{$key}' was " . REMOVED;
-            } elseif ($type === UPDATED) {
-                $old = $node['old'];
-                $new = $node['new'];
-                $acc[] = "Property '{$path}{$key}' was " . UPDATED
-                    . ". From {$renderValue($old)} to {$renderValue($new)}";
-            }
-            return $acc;
-        }, []);
-        return implode("\n", flattenAll($lines));
-    };
+function renderDiff($nodes, $path = ''): string
+{
+    $lines = array_map(function ($node) use ($path) {
+        $type = $node['type'];
+        $key = $node['key'];
+        $newPath = "{$path}{$key}.";
 
-    return $renderDiff($diff) . "\n";
+        return match (true) {
+            $type === NESTED => sprintf(
+                "%s",
+                renderDiff($node['children'] ?? [], $newPath)
+            ),
+
+            $type === ADDED => sprintf(
+                "Property '%s%s' was %s with value: %s",
+                $path,
+                $key,
+                ADDED,
+                renderValue($node['value'])
+            ),
+
+            $type === REMOVED => sprintf(
+                "Property '%s%s' was %s",
+                $path,
+                $key,
+                REMOVED
+            ),
+
+            $type === UPDATED => sprintf(
+                "Property '%s%s' was %s. From %s to %s",
+                $path,
+                $key,
+                UPDATED,
+                renderValue($node['old']),
+                renderValue($node['new'])
+            ),
+
+            default => '',
+        };
+    }, $nodes);
+
+    $flattened = flattenAll($lines);
+    $withoutEmptyLines = array_filter($flattened);
+
+    return implode("\n", $withoutEmptyLines);
+}
+
+function renderValue($value): string
+{
+    if (is_array($value)) {
+        return "[complex value]";
+    }
+    return toString($value);
 }
 
 function toString(mixed $value): string
@@ -53,5 +80,9 @@ function toString(mixed $value): string
         return 'null';
     }
 
-    return var_export($value, true);
+    if (is_bool($value)) {
+        return $value ? 'true' : 'false';
+    }
+
+    return is_string($value) ? "'{$value}'" : (string) $value;
 }

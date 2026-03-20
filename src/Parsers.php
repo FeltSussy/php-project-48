@@ -3,80 +3,57 @@
 namespace Differ\Parsers;
 
 use Symfony\Component\Yaml\Yaml;
-use JsonException,
-
-RuntimeException, InvalidArgumentException;
+use InvalidArgumentException;
 
 const JSON = 'json';
 const YAML = 'yaml';
 const YML = 'yml';
 
 
-function getContent(string $path): array
+function getContent(string $path): string
 {
-    $absolutePath = getPath($path);
-    $format = getFileFormat($path);
+    $absolutePath = realpath($path);
 
     if (is_dir($absolutePath)) {
         throw new InvalidArgumentException('Path is a directory');
-    } elseif (!is_file($absolutePath)) {
+    }
+
+    if (!is_file($absolutePath)) {
         throw new InvalidArgumentException('File not found');
-    } elseif (!is_readable($absolutePath)) {
+    }
+
+    if (!is_readable($absolutePath)) {
         throw new InvalidArgumentException('File is not readable');
     }
 
-    return parseFileByFormat($format, $absolutePath);
+    return file_get_contents($absolutePath);
 }
 
-function parseFileByFormat(string $format, string $path): array
+function parseContentByFormat(string $content, string $format): array
 {
-    $contentString = file_get_contents($path);
+    switch ($format) {
+        case (JSON):
+            return json_decode($content, true);
 
-    if ($contentString === false) {
-        throw new InvalidArgumentException("Failed to read file: {$path}");
-    }
+        case (YAML):
+            return Yaml::parse($content);
 
-    if ($format === JSON) {
-        $contentArray = json_decode($contentString, true);
+        case (YML):
+            return Yaml::parse($content);
 
-        if (!is_array($contentArray)) {
-            throw new JsonException('Invalid JSON');
-        }
-
-        return $contentArray;
-    }
-
-    if ($format === YAML || $format === YML) {
-        $contentArray = Yaml::parse($contentString);
-
-        if (!is_array($contentArray)) {
-            throw new InvalidArgumentException('Invalid YAML');
-        }
-
-        return $contentArray;
-    }
-
-    throw new InvalidArgumentException("Unsupported format: {$format}");
-}
-
-function isAbsolute(string $path): bool
-{
-    return str_starts_with($path, '/');
-}
-
-function getPath(string $path): string
-{
-    $relPath = getcwd() . '/' . $path;
-    return isAbsolute($path) ? $path : $relPath;
+        default:
+            throw new InvalidArgumentException("Unsupported format: {$format}");
+    };
 }
 
 function getFileFormat(string $path): string
 {
-    $pos = strrpos($path, '.');
+    $absolutePath = realpath($path);
+    $pos = strrpos($absolutePath, '.');
 
     if ($pos === false) {
-        throw new InvalidArgumentException("File has no extension: {$path}");
+        throw new InvalidArgumentException("File has no extension: {$absolutePath}");
     }
 
-    return substr($path, $pos + 1);
+    return substr($absolutePath, $pos + 1);
 }

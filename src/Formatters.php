@@ -4,25 +4,25 @@ namespace Differ\Formatters;
 
 use InvalidArgumentException;
 
-use function Differ\Formatters\Stylish\formStylish;
-use function Differ\Formatters\Plain\formPlain;
-use function Differ\Formatters\Json\formJson;
+use function Differ\Formatters\Stylish\renderStylish;
+use function Differ\Formatters\Plain\renderPlain;
+use function Differ\Formatters\Json\renderJson;
 
 const STYLISH = 'stylish';
 const PLAIN = 'plain';
 const JSON = 'json';
 
-function formString(array $diff, string $formatName): string
+function format(array $diff, string $formatName): string
 {
     switch ($formatName) {
         case STYLISH:
-            return formStylish($diff);
+            return renderStylish($diff);
 
         case PLAIN:
-            return formPlain($diff);
+            return renderPlain($diff);
 
         case JSON:
-            return formJson($diff);
+            return renderJson($diff);
 
         default:
             throw new InvalidArgumentException("Unknown format");

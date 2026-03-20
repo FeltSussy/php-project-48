@@ -8,88 +8,38 @@ use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 use function Differ\Differ\genDiff;
-use function Differ\Parsers\getFileFormat;
 
 #[CoversFunction('Differ\Differ\genDiff')]
+#[CoversFunction('Differ\Formatters\format')]
+#[CoversFunction('Differ\Formatters\Stylish\renderStylish')]
+#[CoversFunction('Differ\Formatters\Plain\renderPlain')]
+#[CoversFunction('Differ\Formatters\Json\renderJson')]
+#[CoversFunction('Differ\Parsers\getContent')]
+#[CoversFunction('Differ\Parsers\parseContentByFormat')]
+#[CoversFunction('Differ\Parsers\getFileFormat')]
 class DifferTest extends TestCase
 {
     #[DataProvider('differProvider')]
-    public function testDiffer(string $path1, string $path2): void
+    public function testDiffer(string $formats): void
     {
-        $this->assertEquals(
-            <<<EOT
-          {
-              common: {
-                + follow: false
-                  setting1: Value 1
-                - setting2: 200
-                - setting3: true
-                + setting3: null
-                + setting4: blah blah
-                + setting5: {
-                      key5: value5
-                  }
-                  setting6: {
-                      doge: {
-                        - wow: 
-                        + wow: so much
-                      }
-                      key: value
-                    + ops: vops
-                  }
-              }
-              group1: {
-                - baz: bas
-                + baz: bars
-                  foo: bar
-                - nest: {
-                      key: value
-                  }
-                + nest: str
-              }
-            - group2: {
-                  abc: 12345
-                  deep: {
-                      id: 45
-                  }
-              }
-            + group3: {
-                  deep: {
-                      id: {
-                          number: 45
-                      }
-                  }
-                  fee: 100500
-              }
-          }
-          
-          EOT,
-            genDiff($path1, $path2)
-        );
-        $this->assertEquals(
-            <<<EOT
-            Property 'common.follow' was added with value: false
-            Property 'common.setting2' was removed
-            Property 'common.setting3' was updated. From true to null
-            Property 'common.setting4' was added with value: 'blah blah'
-            Property 'common.setting5' was added with value: [complex value]
-            Property 'common.setting6.doge.wow' was updated. From '' to 'so much'
-            Property 'common.setting6.ops' was added with value: 'vops'
-            Property 'group1.baz' was updated. From 'bas' to 'bars'
-            Property 'group1.nest' was updated. From [complex value] to 'str'
-            Property 'group2' was removed
-            Property 'group3' was added with value: [complex value]
+        $path1 = __DIR__ . "/fixtures/file1.{$formats}";
+        $path2 = __DIR__ . "/fixtures/file2.{$formats}";
 
-            EOT,
-            genDiff($path1, $path2, 'plain')
-        );
+        $expectedStylish = __DIR__ . '/fixtures/stylish-test.txt';
+        $expectedPlain = __DIR__ . '/fixtures/plain-test.txt';
+        $expectedJson = __DIR__ . '/fixtures/json-test.txt';
+
+        $this->assertStringEqualsFile($expectedStylish, genDiff($path1, $path2));
+        $this->assertStringEqualsFile($expectedStylish, genDiff($path1, $path2, 'stylish'));
+        $this->assertStringEqualsFile($expectedPlain, genDiff($path1, $path2, 'plain'));
+        $this->assertStringEqualsFile($expectedJson, genDiff($path1, $path2, 'json'));
     }
 
     public static function differProvider(): array
     {
         return [
-        [__DIR__ . "/fixtures/file1.json", __DIR__ . "/fixtures/file2.json"],
-        [__DIR__ . "/fixtures/file1.yaml", __DIR__ . "/fixtures/file2.yml"],
+            'Json' => ['json'],
+            'Yaml' => ['yaml'],
         ];
     }
 }
