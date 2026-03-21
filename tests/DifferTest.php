@@ -3,8 +3,6 @@
 namespace Tests\Differ;
 
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 use function Differ\Differ\genDiff;
@@ -12,14 +10,14 @@ use function Differ\Differ\genDiff;
 class DifferTest extends TestCase
 {
     #[DataProvider('differProvider')]
-    public function testDiffer(string $formats): void
+    public function testDiffer(string $format): void
     {
-        $path1 = __DIR__ . "/fixtures/file1.{$formats}";
-        $path2 = __DIR__ . "/fixtures/file2.{$formats}";
+        $path1 = self::getFixtureFullPath("file1.{$format}");
+        $path2 = self::getFixtureFullPath("file2.{$format}");
 
-        $expectedStylish = __DIR__ . '/fixtures/stylish-test.txt';
-        $expectedPlain = __DIR__ . '/fixtures/plain-test.txt';
-        $expectedJson = __DIR__ . '/fixtures/json-test.txt';
+        $expectedStylish = self::getFixtureFullPath('stylish-test.txt');
+        $expectedPlain = self::getFixtureFullPath('plain-test.txt');
+        $expectedJson = self::getFixtureFullPath('json-test.txt');
 
         $this->assertStringEqualsFile($expectedStylish, genDiff($path1, $path2));
         $this->assertStringEqualsFile($expectedStylish, genDiff($path1, $path2, 'stylish'));
@@ -33,5 +31,10 @@ class DifferTest extends TestCase
             'Json' => ['json'],
             'Yaml' => ['yaml'],
         ];
+    }
+
+    private static function getFixtureFullPath(string $fileName): string
+    {
+        return __DIR__ . "/fixtures/{$fileName}";
     }
 }

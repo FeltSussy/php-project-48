@@ -12,7 +12,6 @@ use const Differ\Constants\{
     NESTED,
 };
 
-const SPECIFIER_TEMPLATE = '%s%s%s: %s';
 const INDENT_SYMBOL = ' ';
 const INDENT_COUNT = 4;
 const SPECIAL_CHAR_LENGTH = 2;
@@ -25,7 +24,8 @@ const SPECIAL_CHARS = [
 
 function renderStylish(array $diff): string
 {
-    return sprintf("%s\n}\n", renderDiff($diff));
+    $rendered = renderDiff($diff);
+    return "{$rendered}\n}\n";
 }
 
 function renderDiff(array $diff, int $depth = 1): string
@@ -36,54 +36,33 @@ function renderDiff(array $diff, int $depth = 1): string
         $type = $node['type'];
         $key = $node['key'];
 
-        return match (true) {
-            $type === REMOVED => sprintf(
-                SPECIFIER_TEMPLATE,
-                $indent,
-                SPECIAL_CHARS[REMOVED],
-                $key,
-                renderValue($node['value'], $depth + 1)
-            ),
+        if ($type === REMOVED || $type === ADDED || $type === UNCHANGED) {
+            $value = renderValue($node['value'], $depth + 1);
+            $specialChr = match ($type) {
+                REMOVED => SPECIAL_CHARS[REMOVED],
+                ADDED => SPECIAL_CHARS[ADDED],
+                UNCHANGED => SPECIAL_CHARS[UNCHANGED],
+            };
 
-            $type === ADDED => sprintf(
-                SPECIFIER_TEMPLATE,
-                $indent,
-                SPECIAL_CHARS[ADDED],
-                $key,
-                renderValue($node['value'], $depth + 1)
-            ),
+            return "{$indent}{$specialChr}{$key}: {$value}";
+        }
 
-            $type === UNCHANGED => sprintf(
-                SPECIFIER_TEMPLATE,
-                $indent,
-                SPECIAL_CHARS[UNCHANGED],
-                $key,
-                renderValue($node['value'], $depth + 1)
-            ),
+        if ($type === UPDATED) {
+            $oldValue = renderValue($node['old'], $depth + 1);
+            $newValue = renderValue($node['new'], $depth + 1);
+            $specialCheRemoved = SPECIAL_CHARS[REMOVED];
+            $specialChrAdded = SPECIAL_CHARS[ADDED];
+            return "{$indent}{$specialCheRemoved}{$key}: {$oldValue}\n{$indent}{$specialChrAdded}{$key}: {$newValue}";
+        }
 
-            $type === UPDATED => sprintf(
-                SPECIFIER_TEMPLATE . "\n" . SPECIFIER_TEMPLATE,
-                $indent,
-                SPECIAL_CHARS[REMOVED],
-                $key,
-                renderValue($node['old'], $depth + 1),
-                $indent,
-                SPECIAL_CHARS[ADDED],
-                $key,
-                renderValue($node['new'], $depth + 1)
-            ),
+        if ($type === NESTED) {
+            $children = $node['children'] ?? [];
+            $specialChr = SPECIAL_CHARS[NESTED];
+            $recursion = renderDiff($children, $depth + 1);
+            return "{$indent}{$specialChr}{$key}: {$recursion}\n{$indent}  }";
+        }
 
-            $type === NESTED => sprintf(
-                SPECIFIER_TEMPLATE . "\n%s  }",
-                $indent,
-                SPECIAL_CHARS[NESTED],
-                $key,
-                renderDiff($node['children'] ?? [], $depth + 1),
-                $indent
-            ),
-
-            default => throw new InvalidArgumentException('Invalid node type'),
-        };
+        return throw new InvalidArgumentException("Invalid node type '{$type}'");
     }, $diff);
 
     return implode("\n", ["{", ...$lines]);
@@ -91,29 +70,25 @@ function renderDiff(array $diff, int $depth = 1): string
 
 function renderValue(mixed $value, int $depth): string
 {
-    if (!is_array($value)) {
-        return toString($value);
+    if (is_array($value)) {
+        $currentIndent = str_repeat(INDENT_SYMBOL, $depth * INDENT_COUNT);
+        $closingIndent = str_repeat(INDENT_SYMBOL, ($depth - 1) * INDENT_COUNT);
+
+        $lines = array_map(
+            function ($key, $value) use ($currentIndent, $depth) {
+                $recursion = renderValue($value, $depth + 1);
+                return "{$currentIndent}{$key}: {$recursion}";
+            },
+            array_keys($value),
+            $value
+        );
+
+        $imploded = implode("\n", $lines);
+
+        return "{\n{$imploded}\n{$closingIndent}}";
     }
 
-    $currentIndent = str_repeat(INDENT_SYMBOL, $depth * INDENT_COUNT);
-    $closingIndent = str_repeat(INDENT_SYMBOL, ($depth - 1) * INDENT_COUNT);
-
-    $lines = array_map(
-        fn($key, $value) => sprintf(
-            "%s%s: %s",
-            $currentIndent,
-            $key,
-            renderValue($value, $depth + 1)
-        ),
-        array_keys($value),
-        $value
-    );
-
-    return sprintf(
-        "{\n%s\n%s}",
-        implode("\n", $lines),
-        $closingIndent
-    );
+    return toString($value);
 }
 
 function toString(mixed $value): string

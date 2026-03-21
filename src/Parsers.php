@@ -9,8 +9,25 @@ const JSON = 'json';
 const YAML = 'yaml';
 const YML = 'yml';
 
+function parse(string $path): array
+{
+    $content = getFileContent($path);
+    $format = getFileFormat($path);
 
-function getContent(string $path): string
+    switch ($format) {
+        case JSON:
+            return json_decode($content, true);
+
+        case YAML:
+        case YML:
+            return Yaml::parse($content);
+
+        default:
+            throw new InvalidArgumentException("Unsupported format: {$format}");
+    }
+}
+
+function getFileContent(string $path): string
 {
     $absolutePath = realpath($path);
 
@@ -30,30 +47,13 @@ function getContent(string $path): string
         throw new InvalidArgumentException('File is not readable');
     }
 
-    $content = file_get_contents($absolutePath);
+    $fileContent = file_get_contents($absolutePath);
 
-    if ($content === false) {
+    if ($fileContent === false) {
         throw new InvalidArgumentException('Failed to read file');
     }
 
-    return $content;
-}
-
-function parseContentByFormat(string $content, string $format): array
-{
-    switch ($format) {
-        case JSON:
-            return json_decode($content, true);
-
-        case YAML:
-            return Yaml::parse($content);
-
-        case YML:
-            return Yaml::parse($content);
-
-        default:
-            throw new InvalidArgumentException("Unsupported format: {$format}");
-    }
+    return $fileContent;
 }
 
 function getFileFormat(string $path): string

@@ -7,16 +7,14 @@ use function Funct\Collection\flattenAll;
 use const Differ\Constants\{
     REMOVED,
     ADDED,
-    UNCHANGED,
     UPDATED,
     NESTED
 };
 
-const SPECIAL_CHAR = 2;
-
 function renderPlain(array $diff): string
 {
-    return renderDiff($diff) . "\n";
+    $rendered = renderDiff($diff);
+    return "{$rendered}\n";
 }
 
 function renderDiff(array $nodes, string $path = ''): string
@@ -24,44 +22,39 @@ function renderDiff(array $nodes, string $path = ''): string
     $lines = array_map(function ($node) use ($path) {
         $type = $node['type'];
         $key = $node['key'];
-        $newPath = "{$path}{$key}.";
 
-        return match (true) {
-            $type === NESTED => sprintf(
-                "%s",
-                renderDiff($node['children'] ?? [], $newPath)
-            ),
+        if ($type === NESTED) {
+            $children = $node['children'] ?? [];
+            $path .= $key . '.';
+            return renderDiff($children, $path);
+        }
 
-            $type === ADDED => sprintf(
-                "Property '%s%s' was %s with value: %s",
-                $path,
-                $key,
-                ADDED,
-                renderValue($node['value'])
-            ),
+        if ($type === ADDED) {
+            $value = renderValue($node['value']);
+            $added = ADDED;
+            return "Property '{$path}{$key}' was {$added} with value: {$value}";
+        }
 
-            $type === REMOVED => sprintf(
-                "Property '%s%s' was %s",
-                $path,
-                $key,
-                REMOVED
-            ),
+        if ($type === REMOVED) {
+            $removed = REMOVED;
+            return "Property '{$path}{$key}' was {$removed}";
+        }
 
-            $type === UPDATED => sprintf(
-                "Property '%s%s' was %s. From %s to %s",
-                $path,
-                $key,
-                UPDATED,
-                renderValue($node['old']),
-                renderValue($node['new'])
-            ),
+        if ($type === UPDATED) {
+            $old = renderValue($node['old']);
+            $new = renderValue($node['new']);
+            $updated = UPDATED;
+            return "Property '{$path}{$key}' was {$updated}. From {$old} to {$new}";
+        }
 
-            default => '',
-        };
+        return '';
     }, $nodes);
 
     $flattened = flattenAll($lines);
-    $withoutEmptyLines = array_filter($flattened, fn(string $line) => $line !== '');
+    $withoutEmptyLines = array_filter(
+        $flattened,
+        static fn(string $line) => $line !== ''
+    );
 
     return implode("\n", $withoutEmptyLines);
 }
