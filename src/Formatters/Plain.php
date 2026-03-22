@@ -25,8 +25,8 @@ function renderDiff(array $nodes, string $path = ''): string
 
         if ($type === NESTED) {
             $children = $node['children'] ?? [];
-            $path .= $key . '.';
-            return renderDiff($children, $path);
+            $newPath = "{$path}{$key}.";
+            return renderDiff($children, $newPath);
         }
 
         if ($type === ADDED) {

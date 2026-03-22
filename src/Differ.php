@@ -3,6 +3,8 @@
 namespace Differ\Differ;
 
 use function Differ\Parsers\parse;
+use function Differ\Parsers\getFileContent;
+use function Differ\Parsers\getFileFormat;
 use function Differ\Formatters\format;
 use function Funct\Collection\sortBy;
 
@@ -16,8 +18,8 @@ use const Differ\Constants\{
 
 function genDiff(string $firstPath, string $secondPath, string $formatName = 'stylish'): string
 {
-    $firstParsed = parse($firstPath);
-    $secondParsed = parse($secondPath);
+    $firstParsed = parse(getFileContent($firstPath), getFileFormat($firstPath));
+    $secondParsed = parse(getFileContent($secondPath), getFileFormat($secondPath));
 
     $diffTree = buildDiffTree($firstParsed, $secondParsed);
 

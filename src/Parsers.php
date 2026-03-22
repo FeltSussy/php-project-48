@@ -9,11 +9,8 @@ const JSON = 'json';
 const YAML = 'yaml';
 const YML = 'yml';
 
-function parse(string $path): array
+function parse(string $content, string $format): array
 {
-    $content = getFileContent($path);
-    $format = getFileFormat($path);
-
     switch ($format) {
         case JSON:
             return json_decode($content, true);
